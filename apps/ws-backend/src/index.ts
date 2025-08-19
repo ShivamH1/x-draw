@@ -1,15 +1,34 @@
 import { WebSocketServer } from "ws";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 const wss = new WebSocketServer({ port: 8081 });
 
-wss.on("connection", (ws) => {
-  ws.on("error", (error) => {
-    console.error("WebSocket error:", error);
-  });
+wss.on("connection", (ws, request) => {
+  try {
+    const url = request.url;
 
-  ws.on("message", (message) => {
-    console.log("Received message:", message);
-  });
+    if (!url) {
+      return;
+    }
+    const queryParams = new URLSearchParams(url.split("?")[1]);
+    const token = queryParams.get("token") || "";
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_SECRET as string
+    ) as JwtPayload;
 
-  ws.send("Hello from server");
+    if (!decoded || !decoded.userId) {
+      ws.close();
+      return;
+    }
+    ws.on("message", (message) => {
+      console.log("Received message:", message);
+    });
+
+    ws.send("Hello from server");
+  } catch (error) {
+    ws.on("error", (error) => {
+      console.error("WebSocket error:", error);
+    });
+  }
 });
