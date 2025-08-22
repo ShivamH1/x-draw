@@ -68,8 +68,8 @@ app.post("/signin", async (req: Request, res: Response) => {
 });
 
 app.post("/room", middleware, async (req: Request, res: Response) => {
-  const data = createRoomSchema.safeParse(req.body);
-  if (!data.success) {
+  const reqBody = createRoomSchema.safeParse(req.body);
+  if (!reqBody.success) {
     return res.status(400).json({
       message: "Incorrect inputs",
     });
@@ -83,7 +83,7 @@ app.post("/room", middleware, async (req: Request, res: Response) => {
   
   const room = await prismaClient.room.create({
     data: {
-      slug: data.data.name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
+      slug: reqBody.data.name.toLowerCase().replace(/\s+/g, '-') + '-' + Date.now(),
       adminId: userId,
     },
   });
