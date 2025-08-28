@@ -4,6 +4,20 @@ import { JWT_SECRET } from "@repo/backend-common/config";
 
 const wss = new WebSocketServer({ port: 8081 });
 
+function checkUser(token: string): string | null {
+  const decoded = jwt.verify(token, JWT_SECRET as string) as JwtPayload;
+
+  if (typeof decoded == "string") {
+    return null;
+  }
+
+  if (!decoded || !decoded.userId) {
+    return null;
+  }
+
+  return decoded.userId;
+}
+
 wss.on("connection", (ws, request) => {
   try {
     const url = request.url;
@@ -13,20 +27,16 @@ wss.on("connection", (ws, request) => {
     }
     const queryParams = new URLSearchParams(url.split("?")[1]);
     const token = queryParams.get("token") || "";
-    const decoded = jwt.verify(token, JWT_SECRET as string) as JwtPayload;
-
-    if (!decoded || !decoded.userId) {
+    
+    const userAuthenticated = checkUser(token);
+    
+    if (!userAuthenticated) {
       ws.close();
       return;
     }
-    ws.on("message", (message) => {
-      console.log("Received message:", message);
-    });
 
     ws.send("Hello from server");
   } catch (error) {
-    ws.on("error", (error) => {
-      console.error("WebSocket error:", error);
-    });
+    console.error("WebSocket error:", error);
   }
 });
