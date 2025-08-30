@@ -2,16 +2,11 @@ import { WebSocketServer, WebSocket } from "ws";
 import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import { prismaClient } from "@repo/db/client";
+import { UserManager, User } from "./UserManager";
 
 const wss = new WebSocketServer({ port: 8081 });
 
-interface User {
-  ws: WebSocket;
-  rooms: string[];
-  userId: string;
-}
-
-const users: User[] = [];
+const userManager = UserManager.getInstance();
 
 function checkUser(token: string): string | null {
   try {
@@ -48,7 +43,7 @@ wss.on("connection", (ws, request) => {
       return;
     }
 
-    users.push({
+    userManager.addUser({
       userId: userAuthenticated,
       rooms: [],
       ws,
@@ -58,32 +53,21 @@ wss.on("connection", (ws, request) => {
       const parsedMessage = JSON.parse(message.toString());
 
       if (parsedMessage.type === "join-room") {
-        const user = users.find((x) => x.ws === ws);
-        user?.rooms.push(parsedMessage.roomId);
+        userManager.joinRoom(ws, parsedMessage.roomId);
       }
 
       if (parsedMessage.type === "leave-room") {
-        const user = users.find((x) => x.ws === ws);
-        if (!user) {
-          return;
-        }
-        user.rooms = user.rooms.filter((x) => x === parsedMessage.room);
+        userManager.leaveRoom(ws, parsedMessage.roomId);
       }
 
       if (parsedMessage.type === "chat") {
         const roomId = parsedMessage.roomId;
         const message = parsedMessage.message;
 
-        users.forEach((user) => {
-          if (user.rooms.includes(roomId)) {
-            user.ws.send(
-              JSON.stringify({
-                type: "chat",
-                roomId,
-                message,
-              })
-            );
-          }
+        userManager.broadcastToRoom(roomId, {
+          type: "chat",
+          roomId,
+          message,
         });
 
         await prismaClient.chat.create({
@@ -94,6 +78,10 @@ wss.on("connection", (ws, request) => {
           },
         });
       }
+    });
+
+    ws.on("close", () => {
+      userManager.removeUser(ws);
     });
 
     ws.send("Hello from server");
