@@ -49,42 +49,79 @@ wss.on("connection", (ws, request) => {
       ws,
     });
 
+    console.log(`User ${userAuthenticated} connected to WebSocket`);
+
     ws.on("message", async (message) => {
-      const parsedMessage = JSON.parse(message.toString());
+      try {
+        const parsedMessage = JSON.parse(message.toString());
+        console.log(`Received message from user ${userAuthenticated}:`, parsedMessage);
 
-      if (parsedMessage.type === "join-room") {
-        userManager.joinRoom(ws, parsedMessage.roomId);
-      }
+        if (parsedMessage.type === "join-room") {
+          userManager.joinRoom(ws, parsedMessage.roomId);
+          console.log(`User ${userAuthenticated} joined room ${parsedMessage.roomId}`);
+          
+          // Send confirmation back to user
+          ws.send(JSON.stringify({
+            type: "room-joined",
+            roomId: parsedMessage.roomId,
+            message: `Successfully joined room ${parsedMessage.roomId}`
+          }));
+        }
 
-      if (parsedMessage.type === "leave-room") {
-        userManager.leaveRoom(ws, parsedMessage.roomId);
-      }
+        if (parsedMessage.type === "leave-room") {
+          userManager.leaveRoom(ws, parsedMessage.roomId);
+          console.log(`User ${userAuthenticated} left room ${parsedMessage.roomId}`);
+        }
 
-      if (parsedMessage.type === "chat") {
+        if (parsedMessage.type === "chat") {
         const roomId = parsedMessage.roomId;
         const message = parsedMessage.message;
 
+        console.log(`Broadcasting message in room ${roomId}: "${message}" from user ${userAuthenticated}`);
+
+        // Broadcast to all users in the room (including sender for confirmation)
         userManager.broadcastToRoom(roomId, {
           type: "chat",
           roomId,
           message,
+          userId: userAuthenticated,
+          timestamp: new Date().toISOString(),
         });
 
-        await prismaClient.chat.create({
-          data: {
-            message,
-            roomId,
-            userId: userAuthenticated,
-          },
-        });
+        // Save to database
+        try {
+          await prismaClient.chat.create({
+            data: {
+              message,
+              roomId: parseInt(roomId),
+              userId: userAuthenticated,
+            },
+          });
+          console.log("Message saved to database");
+        } catch (error) {
+          console.error("Error saving message to database:", error);
+        }
+        }
+      } catch (error) {
+        console.error("Error parsing message:", error);
+        ws.send(JSON.stringify({
+          type: "error",
+          message: "Invalid message format"
+        }));
       }
     });
 
     ws.on("close", () => {
+      console.log(`User ${userAuthenticated} disconnected from WebSocket`);
       userManager.removeUser(ws);
     });
 
-    ws.send("Hello from server");
+    // Send welcome message
+    ws.send(JSON.stringify({
+      type: "welcome",
+      message: "Connected to WebSocket server",
+      userId: userAuthenticated
+    }));
   } catch (error) {
     console.error("WebSocket error:", error);
   }

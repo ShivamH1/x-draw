@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
+import cors from "cors";
 import { middleware } from "./middleware";
 import { JWT_SECRET } from "@repo/backend-common/config";
 import {
@@ -12,6 +13,7 @@ import { prismaClient } from "@repo/db/client";
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
 app.post("/signup", async (req: Request, res: Response) => {
   const reqBody = createUserSchema.safeParse(req.body);
@@ -32,7 +34,7 @@ app.post("/signup", async (req: Request, res: Response) => {
     // Hash password before storing
     const saltRounds = 10;
     const hashedPassword = await bcrypt.hash(reqBody.data.password, saltRounds);
-    
+
     const newUser = await prismaClient.user.create({
       data: {
         email: reqBody.data.email,
@@ -69,7 +71,10 @@ app.post("/signin", async (req: Request, res: Response) => {
   }
 
   // Compare hashed password
-  const isPasswordValid = await bcrypt.compare(reqBody.data.password, user.password);
+  const isPasswordValid = await bcrypt.compare(
+    reqBody.data.password,
+    user.password
+  );
   if (!isPasswordValid) {
     return res.status(400).json({ message: "Invalid password" });
   }
@@ -101,8 +106,7 @@ app.post("/room", middleware, async (req: Request, res: Response) => {
 
   const room = await prismaClient.room.create({
     data: {
-      slug:
-        reqBody.data.name.toLowerCase(),
+      slug: reqBody.data.name.toLowerCase(),
       adminId: userId,
     },
   });
@@ -114,11 +118,24 @@ app.post("/room", middleware, async (req: Request, res: Response) => {
   });
 });
 
+app.get("/rooms/:slug", async (req, res) => {
+  const slug = req.params.slug;
+  const room = await prismaClient.room.findFirst({
+    where: {
+      slug: slug,
+    },
+  });
+  if (!room) {
+    return res.status(404).json({ message: "Room not found" });
+  }
+  res.status(200).json({ room: room });
+});
+
 app.get("/chats/:roomId", async (req, res) => {
   const roomId = req.params.roomId;
   const chats = await prismaClient.chat.findMany({
     where: {
-      roomId: parseInt(roomId)
+      roomId: parseInt(roomId),
     },
     orderBy: {
       id: "desc",
@@ -127,7 +144,7 @@ app.get("/chats/:roomId", async (req, res) => {
   });
 
   res.status(200).json({ chats });
-})
+});
 
 app.listen(8080, () => {
   console.log("HTTP Server is running on port 8080");
