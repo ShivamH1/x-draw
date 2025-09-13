@@ -1,6 +1,5 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { WS_BACKEND_URL } from "../../../config";
 import { useAuth } from "./useAuth";
@@ -24,9 +23,10 @@ export function useSocket() {
     setError(null);
 
     const token = localStorage.getItem("authToken");
+    let ws: WebSocket;
 
     try {
-      const ws = new WebSocket(`${WS_BACKEND_URL}?token=${token}`);
+      ws = new WebSocket(`${WS_BACKEND_URL}?token=${token}`);
 
       ws.onopen = () => {
         console.log("WebSocket connection opened successfully");
@@ -55,6 +55,13 @@ export function useSocket() {
       setLoading(false);
       setError("Failed to create WebSocket connection");
     }
+
+    // Cleanup function to close WebSocket when component unmounts
+    return () => {
+      if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.close(1000, "Component unmounting");
+      }
+    };
   }, [isAuthenticated]);
 
   return { loading, socket, error };

@@ -2,12 +2,10 @@
 
 import React, { useEffect, useRef } from "react";
 import { initDraw } from "../../draw";
-import { useSocket } from "../../services/hooks/useSocket";
 
-function Canvas({ roomId }: { roomId: string }) {
+function Canvas({ roomId, socket }: { roomId: string; socket: WebSocket | null }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { socket } = useSocket();
-  
+
   useEffect(() => {
     if (canvasRef.current && socket) {
       const canvas = canvasRef.current;
@@ -17,7 +15,13 @@ function Canvas({ roomId }: { roomId: string }) {
 
   return (
     <div>
-      <canvas ref={canvasRef} id="canvas" width={2000} height={1000}></canvas>
+      <canvas
+        ref={canvasRef}
+        id="canvas"
+        width={2000}
+        height={1000}
+        className="cursor-crosshair"
+      />
     </div>
   );
 }

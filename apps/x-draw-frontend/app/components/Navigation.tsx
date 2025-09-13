@@ -2,10 +2,11 @@
 
 import React from "react";
 import { useAuth } from "../services/hooks/useAuth";
-import { Pen, LogOut } from "lucide-react";
+import { Pen, LogOut, Menu, X } from "lucide-react";
 
 export const Navigation: React.FC = () => {
   const { isAuthenticated, logout } = useAuth();
+  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
   if (!isAuthenticated) {
     return null;
@@ -27,7 +28,26 @@ export const Navigation: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-8">
+            <a
+              href="#features"
+              className="text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
+            >
+              Features
+            </a>
+            <a
+              href="#about"
+              className="text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
+            >
+              About
+            </a>
+            <a
+              href="#pricing"
+              className="text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
+            >
+              Pricing
+            </a>
             <button
               onClick={logout}
               className="flex items-center space-x-2 text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105 px-3 py-2 rounded-lg hover:bg-gray-800/50"
@@ -36,8 +56,55 @@ export const Navigation: React.FC = () => {
               <span>Logout</span>
             </button>
           </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden">
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              {isMenuOpen ? (
+                <X className="w-6 h-6" />
+              ) : (
+                <Menu className="w-6 h-6" />
+              )}
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {isMenuOpen && (
+        <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-gray-800/50">
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            <a
+              href="#features"
+              className="block px-3 py-2 text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              Features
+            </a>
+            <a
+              href="#about"
+              className="block px-3 py-2 text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              About
+            </a>
+            <a
+              href="#pricing"
+              className="block px-3 py-2 text-gray-300 hover:text-cyan-400 transition-colors"
+            >
+              Pricing
+            </a>
+            <button
+              onClick={logout}
+              className="w-full mt-2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-6 py-2 rounded-lg flex items-center justify-center space-x-2"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
+          </div>
+        </div>
+      )}
     </nav>
   );
 };

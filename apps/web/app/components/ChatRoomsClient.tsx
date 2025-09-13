@@ -19,7 +19,6 @@ export function ChatRoomsClient({
   useEffect(() => {
     if (socket && !loading) {
       socket.send(JSON.stringify({ type: "join-room", roomId: id }));
-      console.log("Joined room:", id);
 
       socket.onmessage = (event) => {
         try {
@@ -62,7 +61,6 @@ export function ChatRoomsClient({
       socket.send(
         JSON.stringify({ type: "chat", message: currentMessage, roomId: id })
       );
-      console.log("Sent message:", currentMessage);
       setCurrentMessage("");
     }
   };

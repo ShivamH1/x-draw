@@ -26,7 +26,7 @@ function RoomCanvas({roomId}: {roomId: string}) {
 
   return ( 
     <div>
-      <Canvas roomId={roomId} />
+      <Canvas roomId={roomId} socket={socket} />
     </div>
   )
 }

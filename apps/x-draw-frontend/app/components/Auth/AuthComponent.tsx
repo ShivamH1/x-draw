@@ -15,7 +15,6 @@ export const AuthContainer: React.FC<{ isSignup?: boolean }> = ({
 
   const handleLogin = async (data: LoginData) => {
     try {
-      console.log("Login data:", data);
       const response = await axiosInstance.post(`${BACKEND_URL}/signin`, data);
       
       // Use the login method from useAuth hook
@@ -30,7 +29,6 @@ export const AuthContainer: React.FC<{ isSignup?: boolean }> = ({
 
   const handleSignup = async (data: SignupData) => {
     try {
-      console.log("Signup data:", data);
       const response = await axiosInstance.post(`${BACKEND_URL}/signup`, data);
       alert("Signup successful! Please login.");
     } catch (error) {

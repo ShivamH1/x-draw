@@ -20,9 +20,9 @@ import {
 } from "lucide-react";
 import "./globals.css";
 import { useRouter } from "next/navigation";
+import { Navigation } from "./components/Navigation";
 
 function Home() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
   const router = useRouter();
 
   return (
@@ -35,93 +35,7 @@ function Home() {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl animate-pulse delay-500"></div>
       </div>
 
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-black/80 backdrop-blur-xl z-50 border-b border-gray-800/50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center space-x-3">
-              <div className="relative">
-                <div className="w-8 h-8 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-lg flex items-center justify-center">
-                  <Pen className="w-5 h-5 text-white" />
-                </div>
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 rounded-lg blur opacity-50 animate-pulse"></div>
-              </div>
-              <span className="text-xl font-bold bg-gradient-to-r from-cyan-400 to-purple-400 bg-clip-text text-transparent">
-                X-Draw
-              </span>
-            </div>
-
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
-              <a
-                href="#features"
-                className="text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
-              >
-                Features
-              </a>
-              <a
-                href="#about"
-                className="text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
-              >
-                About
-              </a>
-              <a
-                href="#pricing"
-                className="text-gray-300 hover:text-cyan-400 transition-all duration-200 hover:scale-105"
-              >
-                Pricing
-              </a>
-              <button className="relative group bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-6 py-2 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25">
-                <span className="relative z-10">Try Now</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              </button>
-            </div>
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-gray-300 hover:text-cyan-400 transition-colors"
-              >
-                {isMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden bg-black/95 backdrop-blur-xl border-t border-gray-800/50">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <a
-                href="#features"
-                className="block px-3 py-2 text-gray-300 hover:text-cyan-400 transition-colors"
-              >
-                Features
-              </a>
-              <a
-                href="#about"
-                className="block px-3 py-2 text-gray-300 hover:text-cyan-400 transition-colors"
-              >
-                About
-              </a>
-              <a
-                href="#pricing"
-                className="block px-3 py-2 text-gray-300 hover:text-cyan-400 transition-colors"
-              >
-                Pricing
-              </a>
-              <button className="w-full mt-2 bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-6 py-2 rounded-lg">
-                Try Now
-              </button>
-            </div>
-          </div>
-        )}
-      </nav>
+      <Navigation />
 
       {/* Hero Section */}
       <section className="relative pt-32 pb-20 z-10">
