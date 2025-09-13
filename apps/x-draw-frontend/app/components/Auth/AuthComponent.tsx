@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { LoginForm } from "./LoginComponent";
 import { SignupForm } from "./SignupComponent";
 import { LoginData, SignupData } from "./types";
@@ -29,7 +29,7 @@ export const AuthContainer: React.FC<{ isSignup?: boolean }> = ({
 
   const handleSignup = async (data: SignupData) => {
     try {
-      const response = await axiosInstance.post(`${BACKEND_URL}/signup`, data);
+      await axiosInstance.post(`${BACKEND_URL}/signup`, data);
       alert("Signup successful! Please login.");
     } catch (error) {
       console.error("Signup error:", error);

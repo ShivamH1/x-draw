@@ -172,7 +172,7 @@ export class DrawingManager {
           this.clearAndRedraw();
         } else if (parsedMessage?.action === 'delete' && parsedMessage.shapeId) {
           this.existingShapes = this.existingShapes.filter(
-            s => (s as any).id !== parsedMessage.shapeId
+            s => (s as Shape & { id?: string }).id !== parsedMessage.shapeId
           );
           this.clearAndRedraw();
         }
@@ -267,7 +267,7 @@ export class DrawingManager {
         font: "20px Arial",
         color: "white",
         id: Date.now().toString(),
-      } as any;
+      } as Shape & { id: string };
       this.addShape(shape);
     }
   }
@@ -275,14 +275,15 @@ export class DrawingManager {
   private handleEraser(x: number, y: number) {
     const shapeToDelete = findShapeAtPosition(x, y, this.existingShapes);
     if (shapeToDelete) {
+      const shapeWithId = shapeToDelete as Shape & { id?: string };
       this.existingShapes = this.existingShapes.filter(
-        s => (s as any).id !== (shapeToDelete as any).id
+        s => (s as Shape & { id?: string }).id !== shapeWithId.id
       );
       this.selectedShape = null;
       this.clearAndRedraw();
       this.sendMessage({
         action: 'delete',
-        shapeId: (shapeToDelete as any).id
+        shapeId: shapeWithId.id
       });
     }
   }
@@ -311,7 +312,7 @@ export class DrawingManager {
 
     switch (this.currentTool) {
       case "rect":
-        return { type: "rect", x: this.startX, y: this.startY, width, height, id } as any;
+        return { type: "rect", x: this.startX, y: this.startY, width, height, id } as Shape & { id: string };
       case "circle":
         const radius = Math.sqrt(width ** 2 + height ** 2);
         return {
@@ -320,13 +321,13 @@ export class DrawingManager {
           centerY: this.startY,
           radius,
           id
-        } as any;
+        } as Shape & { id: string };
       case "line":
-        return { type: "line", startX: this.startX, startY: this.startY, endX, endY, id } as any;
+        return { type: "line", startX: this.startX, startY: this.startY, endX, endY, id } as Shape & { id: string };
       case "arrow":
-        return { type: "arrow", startX: this.startX, startY: this.startY, endX, endY, id } as any;
+        return { type: "arrow", startX: this.startX, startY: this.startY, endX, endY, id } as Shape & { id: string };
       case "diamond":
-        return { type: "diamond", x: this.startX, y: this.startY, width, height, id } as any;
+        return { type: "diamond", x: this.startX, y: this.startY, width, height, id } as Shape & { id: string };
       default:
         return null;
     }
@@ -338,7 +339,7 @@ export class DrawingManager {
     this.sendMessage({ shape });
   }
 
-  private sendMessage(message: any) {
+  private sendMessage(message: { shape?: Shape; action?: string; shapeId?: string }) {
     if (!this.socket) return;
     
     this.socket.send(

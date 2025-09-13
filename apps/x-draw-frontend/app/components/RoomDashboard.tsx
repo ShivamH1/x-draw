@@ -45,9 +45,10 @@ export const RoomDashboard: React.FC = () => {
       
       const { slug } = response.data;
       router.push(`/canvas/${slug}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error creating room:", err);
-      setError(err.response?.data?.message || "Failed to create room. Please try again.");
+      const error = err as { response?: { data?: { message?: string } } };
+      setError(error.response?.data?.message || "Failed to create room. Please try again.");
       setIsCreating(false);
     }
   };
@@ -67,9 +68,10 @@ export const RoomDashboard: React.FC = () => {
       
       // If we get here, room exists, navigate to it
       router.push(`/canvas/${roomSlug.trim().toLowerCase()}`);
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Error joining room:", err);
-      if (err.response?.status === 404) {
+      const error = err as { response?: { status?: number } };
+      if (error.response?.status === 404) {
         setError("Room not found. Please check the room name and try again.");
       } else {
         setError("Failed to join room. Please try again.");

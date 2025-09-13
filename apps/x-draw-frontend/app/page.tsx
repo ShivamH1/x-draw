@@ -6,11 +6,8 @@ import {
   Users,
   Download,
   Zap,
-  Heart,
   Star,
   ArrowRight,
-  Menu,
-  X,
   Github,
   Twitter,
   Mail,
@@ -318,7 +315,7 @@ function Home() {
                   ))}
                 </div>
                 <p className="text-gray-300 mb-6 text-lg leading-relaxed">
-                  "{testimonial.quote}"
+                  &ldquo;{testimonial.quote}&rdquo;
                 </p>
                 <div className="flex items-center space-x-4">
                   <div

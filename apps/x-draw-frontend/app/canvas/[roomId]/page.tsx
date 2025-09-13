@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import RoomCanvas from "../../components/Canvas/RoomCanvas";
 import { ProtectedRoute } from "../../components/Auth/ProtectedRoute";
@@ -38,9 +38,10 @@ function CanvasPage() {
         
         const response = await axiosInstance.get(`${HTTP_BACKEND_URL}/rooms/${roomSlug}`);
         setRoomData(response.data.room);
-      } catch (err: any) {
+      } catch (err: unknown) {
         console.error("Error fetching room data:", err);
-        if (err.response?.status === 404) {
+        const error = err as { response?: { status?: number } };
+        if (error.response?.status === 404) {
           setError("Room not found");
         } else {
           setError("Failed to load room");
@@ -94,7 +95,7 @@ function CanvasPage() {
         <div className="text-center">
           <div className="text-red-400 text-6xl mb-6">⚠️</div>
           <h1 className="text-2xl font-bold mb-2">{error || "Room not found"}</h1>
-          <p className="text-gray-400 mb-8">The room you're looking for doesn't exist or has been deleted.</p>
+          <p className="text-gray-400 mb-8">The room you&apos;re looking for doesn&apos;t exist or has been deleted.</p>
           <Button
             onClick={() => router.push("/rooms")}
             className="bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/25 hover:scale-105"

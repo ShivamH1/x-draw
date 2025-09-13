@@ -110,7 +110,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit }) => {
 
         <div className="mt-8 text-center">
           <p className="text-gray-400">
-            Don't have an account?{' '}
+            Don&apos;t have an account?{' '}
             <button
               onClick={() => router.push('/auth/signup')}
               className="text-blue-400 hover:text-blue-300 font-medium transition-colors duration-200 focus:outline-none focus:underline"

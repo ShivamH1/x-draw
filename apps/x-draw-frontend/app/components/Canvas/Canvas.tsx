@@ -32,7 +32,7 @@ function Canvas({ roomId, socket, currentTool, zoom }: CanvasProps) {
         }
       };
     }
-  }, [canvasRef, socket, roomId]);
+  }, [canvasRef, socket, roomId, currentTool, zoom]);
 
   // Handle tool changes separately to avoid recreating the entire canvas
   useEffect(() => {

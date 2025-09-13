@@ -82,8 +82,10 @@ export function shapesEqual(shape1: Shape, shape2: Shape): boolean {
   if (shape1.type !== shape2.type) return false;
 
   // Use id if available (for shapes with id)
-  if ((shape1 as any).id && (shape2 as any).id) {
-    return (shape1 as any).id === (shape2 as any).id;
+  const shape1WithId = shape1 as Shape & { id?: string };
+  const shape2WithId = shape2 as Shape & { id?: string };
+  if (shape1WithId.id && shape2WithId.id) {
+    return shape1WithId.id === shape2WithId.id;
   }
 
   // Fallback to property comparison

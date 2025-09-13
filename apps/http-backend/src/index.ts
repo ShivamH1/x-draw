@@ -19,6 +19,15 @@ app.use(cors());
 // Swagger documentation
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
+// Health check endpoint
+app.get('/health', (req: Request, res: Response) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    service: 'http-backend'
+  });
+});
+
 /**
  * @swagger
  * /signup:
@@ -392,6 +401,8 @@ app.get("/chats/:roomId", async (req, res) => {
   res.status(200).json({ chats });
 });
 
-app.listen(8080, () => {
-  console.log("HTTP Server is running on port 8080");
+const PORT = process.env.PORT || 8080;
+
+app.listen(PORT, () => {
+  console.log(`HTTP Server is running on port ${PORT}`);
 });
