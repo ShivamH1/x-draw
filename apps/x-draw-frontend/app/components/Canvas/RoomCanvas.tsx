@@ -1,18 +1,27 @@
-'use client'
+"use client";
 
 import { useEffect } from "react";
 import { useSocket } from "../../services/hooks/useSocket";
 import Canvas from "./Canvas";
+import { DrawingTool } from "../../draw/types";
 
-function RoomCanvas({roomId}: {roomId: string}) {
+interface RoomCanvasProps {
+  roomId: string;
+  currentTool: DrawingTool;
+  zoom: number;
+}
+
+function RoomCanvas({ roomId, currentTool, zoom }: RoomCanvasProps) {
   const { socket, loading, error } = useSocket();
 
   useEffect(() => {
     if (socket && roomId) {
-      socket.send(JSON.stringify({ 
-        type: "join-room", 
-        roomId: roomId
-      }));
+      socket.send(
+        JSON.stringify({
+          type: "join-room",
+          roomId: roomId,
+        })
+      );
     }
   }, [socket, roomId]);
 
@@ -24,11 +33,16 @@ function RoomCanvas({roomId}: {roomId: string}) {
     return <div>Error: {error}</div>;
   }
 
-  return ( 
+  return (
     <div>
-      <Canvas roomId={roomId} socket={socket} />
+      <Canvas
+        roomId={roomId}
+        socket={socket}
+        currentTool={currentTool}
+        zoom={zoom}
+      />
     </div>
-  )
+  );
 }
 
-export default RoomCanvas
+export default RoomCanvas;

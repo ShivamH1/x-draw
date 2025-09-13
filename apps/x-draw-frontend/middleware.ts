@@ -10,6 +10,7 @@ export function middleware(request: NextRequest) {
     '/auth/signin',
     '/auth/signup',
     '/api', // API routes
+    '/canvas',
   ];
 
   // Check if the current route is public

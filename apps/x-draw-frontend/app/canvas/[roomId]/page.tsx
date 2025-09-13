@@ -1,39 +1,44 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
+import { useParams } from "next/navigation";
 import RoomCanvas from "../../components/Canvas/RoomCanvas";
 import { ProtectedRoute } from "../../components/Auth/ProtectedRoute";
-import { Button } from "../../../../../packages/ui/src/components/button";
+import { Button } from "@repo/ui/components/button";
+import Toolbar from "../../components/Canvas/Toolbar";
+import { DrawingTool } from "../../draw/types";
 
-async function CanvasPage({ params }: { params: { roomId: string } }) {
-  const roomId = (await params).roomId;
+function CanvasPage() {
+  const params = useParams();
+  const roomId = params.roomId as string;
+  const [currentTool, setCurrentTool] = useState<DrawingTool>("pointer");
+  const [zoom, setZoom] = useState(1);
+
+  const zoomIn = () => setZoom((prev) => prev * 1.1);
+  const zoomOut = () => setZoom((prev) => prev / 1.1);
+
+  if (!roomId) {
+    return <div>Loading...</div>;
+  }
 
   return (
-    <ProtectedRoute>
-      <div className="min-h-screen bg-black text-white">
-        <div className="p-4">
-          <div className="flex items-center justify-between mb-4">
-            <h1 className="text-xl">Canvas Room: {roomId}</h1>
-            <nav className="flex space-x-2">
-              <Button variant="outline" className="rounded-lg cursor-pointer">
-                Pointer
-              </Button>
-              <Button variant="outline" className="rounded-lg cursor-pointer">
-                Rect
-              </Button>
-              <Button variant="outline" className="rounded-lg cursor-pointer">
-                Circle
-              </Button>
-              <Button variant="outline" className="rounded-lg cursor-pointer">
-                Line
-              </Button>
-            </nav>
-            <Button variant="outline" className="rounded-lg cursor-pointer">
-              Leave
-            </Button>
-          </div>
-          <RoomCanvas roomId={roomId} />
-        </div>
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      <div className="p-4 flex items-center justify-between">
+        <h1 className="text-xl">Canvas Room: {roomId}</h1>
+        <Toolbar
+          currentTool={currentTool}
+          setCurrentTool={setCurrentTool}
+          zoomIn={zoomIn}
+          zoomOut={zoomOut}
+        />
+        <Button variant="outline" className="rounded-lg cursor-pointer">
+          Leave
+        </Button>
       </div>
-    </ProtectedRoute>
+      <div className="flex-grow">
+        <RoomCanvas roomId={roomId} currentTool={currentTool} zoom={zoom} />
+      </div>
+    </div>
   );
 }
 

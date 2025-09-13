@@ -2,16 +2,24 @@
 
 import React, { useEffect, useRef } from "react";
 import { initDraw } from "../../draw";
+import { DrawingTool } from "../../draw/types";
 
-function Canvas({ roomId, socket }: { roomId: string; socket: WebSocket | null }) {
+interface CanvasProps {
+  roomId: string;
+  socket: WebSocket | null;
+  currentTool: DrawingTool;
+  zoom: number;
+}
+
+function Canvas({ roomId, socket, currentTool, zoom }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     if (canvasRef.current && socket) {
       const canvas = canvasRef.current;
-      initDraw(canvas, roomId, socket);
+      initDraw(canvas, roomId, socket, currentTool, zoom);
     }
-  }, [canvasRef, socket]);
+  }, [canvasRef, socket, currentTool, zoom]);
 
   return (
     <div>

@@ -18,6 +18,37 @@ export type Shape =
       startY: number;
       endX: number;
       endY: number;
+    }
+  | {
+      type: "diamond";
+      x: number;
+      y: number;
+      width: number;
+      height: number;
+    }
+  | {
+      type: "arrow";
+      startX: number;
+      startY: number;
+      endX: number;
+      endY: number;
+    }
+  | {
+      type: "text";
+      x: number;
+      y: number;
+      text: string;
+      font: string;
+      color: string;
     };
 
-export type DrawingTool = "pointer" | "rect" | "circle" | "line";
+export type DrawingTool =
+  | "pointer"
+  | "hand"
+  | "rect"
+  | "circle"
+  | "line"
+  | "diamond"
+  | "arrow"
+  | "text"
+  | "eraser";
