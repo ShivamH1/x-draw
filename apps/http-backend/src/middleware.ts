@@ -3,10 +3,16 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 import { JWT_SECRET } from "@repo/backend-common/config";
 
 export function middleware(req: Request, res: Response, next: NextFunction) {
-  const token = req.headers["authorization"] ?? "";
+  const authHeader = req.headers["authorization"] ?? "";
+  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+  
+  const token = authHeader.replace("Bearer ", "");
   if (!token) {
     return res.status(401).json({ message: "Unauthorized" });
   }
+  
   try {
     const decoded = jwt.verify(token, JWT_SECRET as string) as JwtPayload & { email: string; userId: string };
     if (typeof decoded === "object" && decoded !== null && "email" in decoded && "userId" in decoded) {

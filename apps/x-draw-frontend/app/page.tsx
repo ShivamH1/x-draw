@@ -20,10 +20,19 @@ import {
 } from "lucide-react";
 import "./globals.css";
 import { useRouter } from "next/navigation";
+import { useAuth } from "./services/hooks/useAuth";
 import { Navigation } from "./components/Navigation";
 
 function Home() {
   const router = useRouter();
+  const { isAuthenticated } = useAuth();
+
+  // Redirect authenticated users to rooms page
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      router.push("/");
+    }
+  }, [isAuthenticated, router]);
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
