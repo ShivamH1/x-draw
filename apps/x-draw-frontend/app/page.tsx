@@ -76,7 +76,7 @@ function Home() {
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </button>
 
-              <button className="group border-2 border-gray-600 text-gray-300 px-8 py-4 rounded-xl hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 flex items-center space-x-2">
+              <button onClick={() => window.open("https://github.com/ShivamH1/x-draw", "_blank")} className="group border-2 border-gray-600 text-gray-300 px-8 py-4 rounded-xl hover:border-cyan-400 hover:text-cyan-400 transition-all duration-300 hover:shadow-lg hover:shadow-cyan-500/10 flex items-center space-x-2">
                 <Github className="w-5 h-5" />
                 <span className="text-lg font-semibold">View Source</span>
               </button>
@@ -340,7 +340,7 @@ function Home() {
                 their visions to life.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="group relative bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-10 py-4 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 hover:scale-105">
+                <button onClick={() => router.push("/auth/signin")} className="group relative bg-gradient-to-r from-cyan-500 to-purple-600 text-white px-10 py-4 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-cyan-500/25 hover:scale-105">
                   <span className="relative z-10 flex items-center justify-center space-x-2 text-lg font-semibold">
                     <span>Start Creating Now</span>
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -378,19 +378,19 @@ function Home() {
               </p>
               <div className="flex space-x-4">
                 <a
-                  href="#"
+                  href="https://github.com/ShivamH1/x-draw"
                   className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 hover:scale-110 transform"
                 >
                   <Github className="w-6 h-6" />
                 </a>
                 <a
-                  href="#"
+                  href="https://x.com/shivam_honrao"
                   className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 hover:scale-110 transform"
                 >
                   <Twitter className="w-6 h-6" />
                 </a>
                 <a
-                  href="#"
+                  href="mailto:shivamhonrao@gmail.com"
                   className="text-gray-400 hover:text-cyan-400 transition-colors duration-200 hover:scale-110 transform"
                 >
                   <Mail className="w-6 h-6" />
