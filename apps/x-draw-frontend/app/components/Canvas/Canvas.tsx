@@ -14,6 +14,13 @@ interface CanvasProps {
 function Canvas({ roomId, socket, currentTool, zoom }: CanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  // This useEffect initializes the drawing functionality on the canvas when the component mounts
+  // or when key dependencies change. It:
+  // 1. Checks if canvas element and socket connection are available
+  // 2. Calls initDraw to set up the drawing manager with event listeners and rendering
+  // 3. Stores the cleanup function returned by initDraw
+  // 4. Returns a cleanup function to properly remove event listeners and clean up resources
+  //    when the component unmounts or dependencies change, preventing memory leaks
   useEffect(() => {
     if (canvasRef.current && socket) {
       const canvas = canvasRef.current;
