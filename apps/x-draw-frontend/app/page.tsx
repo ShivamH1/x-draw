@@ -24,7 +24,6 @@ function Home() {
   const router = useRouter();
   const { isAuthenticated } = useAuth();
 
-  // Redirect authenticated users to rooms page
   React.useEffect(() => {
     if (isAuthenticated) {
       router.push("/");
@@ -33,7 +32,6 @@ function Home() {
 
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
-      {/* Animated Background */}
       <div className="fixed inset-0 z-0">
         <div className="absolute inset-0 bg-gradient-to-br from-purple-900/20 via-black to-blue-900/20"></div>
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
@@ -43,7 +41,6 @@ function Home() {
 
       <Navigation />
 
-      {/* Hero Section */}
       <section className="relative pt-32 pb-20 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center">
@@ -86,12 +83,10 @@ function Home() {
             </div>
           </div>
 
-          {/* Hero Demo */}
           <div className="mt-20 relative">
             <div className="relative bg-gray-900/50 backdrop-blur-sm rounded-3xl p-8 border border-gray-700/50 shadow-2xl max-w-5xl mx-auto">
               <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-purple-500/10 rounded-3xl blur-xl"></div>
               <div className="relative bg-gray-800/80 rounded-2xl p-8 min-h-[500px] border border-gray-700/30">
-                {/* Mock Drawing Interface */}
                 <div className="flex items-center justify-between mb-6">
                   <div className="flex items-center space-x-4">
                     <div className="flex space-x-2">
@@ -115,7 +110,6 @@ function Home() {
                   </div>
                 </div>
 
-                {/* Mock Canvas */}
                 <div className="bg-gray-900/50 rounded-xl p-8 min-h-[400px] flex items-center justify-center border border-gray-700/30">
                   <div className="text-center space-y-6">
                     <div className="relative">
@@ -139,7 +133,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
       <section id="features" className="relative py-20 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -236,7 +229,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Stats Section */}
       <section className="relative py-20 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-3xl p-12 border border-gray-700/50">
@@ -269,7 +261,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Testimonials */}
       <section className="relative py-20 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
@@ -336,7 +327,6 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA Section */}
       <section className="relative py-20 z-10">
         <div className="max-w-4xl mx-auto text-center px-4 sm:px-6 lg:px-8">
           <div className="relative bg-gradient-to-r from-gray-900/80 to-gray-800/80 backdrop-blur-sm rounded-3xl p-12 border border-gray-700/50 overflow-hidden">
@@ -366,7 +356,6 @@ function Home() {
         </div>
       </section>
 
-      {/* Footer */}
       <footer className="relative bg-gray-900/80 backdrop-blur-sm border-t border-gray-800/50 py-16 z-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-4 gap-8">

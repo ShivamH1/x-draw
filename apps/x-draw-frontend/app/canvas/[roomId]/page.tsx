@@ -27,7 +27,6 @@ function CanvasPage() {
   const zoomIn = () => setZoom((prev) => prev * 1.1);
   const zoomOut = () => setZoom((prev) => prev / 1.1);
 
-  // Fetch room data on mount
   useEffect(() => {
     const fetchRoomData = async () => {
       if (!roomSlug) return;
@@ -110,10 +109,8 @@ function CanvasPage() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-black text-white flex flex-col">
-        {/* Enhanced Header */}
         <div className="bg-gray-900/80 backdrop-blur-sm border-b border-gray-800/50 p-4">
           <div className="flex items-center justify-between">
-            {/* Room Info */}
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-3">
                 <div className="relative">
@@ -159,7 +156,6 @@ function CanvasPage() {
               </div>
             </div>
 
-            {/* Toolbar */}
           <Toolbar
             currentTool={currentTool}
             setCurrentTool={setCurrentTool}
@@ -167,7 +163,6 @@ function CanvasPage() {
             zoomOut={zoomOut}
           />
 
-            {/* Leave Button */}
             <Button
               onClick={handleLeaveRoom}
               disabled={isLeaving}
@@ -188,11 +183,9 @@ function CanvasPage() {
           </div>
         </div>
 
-        {/* Canvas Area */}
         <div className="flex-grow relative">
           <RoomCanvas roomId={roomSlug} currentTool={currentTool} zoom={zoom} />
           
-          {/* Zoom Indicator */}
           <div className="absolute bottom-6 left-6 bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-xl px-4 py-2">
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <span>Zoom:</span>
@@ -202,7 +195,6 @@ function CanvasPage() {
             </div>
           </div>
 
-          {/* Tool Indicator */}
           <div className="absolute bottom-6 right-6 bg-gray-900/80 backdrop-blur-sm border border-gray-700/50 rounded-xl px-4 py-2">
             <div className="flex items-center space-x-2 text-sm text-gray-400">
               <span>Tool:</span>
