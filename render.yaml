@@ -27,7 +27,7 @@ services:
         value: '10000'
       # IMPORTANT: Replace with your actual Vercel deployment URL after deploying frontend
       - key: CORS_ORIGIN
-        value: 'https://your-app.vercel.app'
+        value: 'https://x-draws.vercel.app'
 
   - name: ws-backend
     type: web
