@@ -12,7 +12,7 @@ services:
     plan: free
     buildCommand: |
       npm install -g pnpm &&
-      pnpm install &&
+      pnpm install --no-frozen-lockfile &&
       pnpm --filter @repo/db exec prisma generate &&
       pnpm turbo build --filter=http-backend
     startCommand: node apps/http-backend/dist/index.js
@@ -35,7 +35,7 @@ services:
     plan: free
     buildCommand: |
       npm install -g pnpm &&
-      pnpm install &&
+      pnpm install --no-frozen-lockfile &&
       pnpm --filter @repo/db exec prisma generate &&
       pnpm turbo build --filter=ws-backend
     startCommand: node apps/ws-backend/dist/index.js
