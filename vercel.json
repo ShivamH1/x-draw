@@ -1,3 +1,7 @@
 {
-  "root": "apps/x-draw-frontend"
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "cd ../.. && npm install -g pnpm && pnpm install",
+  "buildCommand": "cd ../.. && pnpm turbo build --filter=x-draw-frontend",
+  "outputDirectory": ".next"
 }

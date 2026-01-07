@@ -7,25 +7,15 @@ envVarGroups:
 services:
   - name: http-backend
     type: web
-    env: node
-    buildCommand: 'pnpm install && pnpm turbo build --filter=http-backend'
-    startCommand: 'node apps/http-backend/dist/index.js'
-    envVars:
-      - fromGroup: shared-secrets
-      - key: DATABASE_URL
-        fromDatabase:
-          name: x-draw-db
-          property: connectionString
-      # IMPORTANT: Replace <your-frontend-url> with your actual Vercel deployment URL
-      # once it's available. For example: https://x-draw-frontend-123.vercel.app
-      - key: CORS_ORIGIN
-        value: 'https://<your-frontend-url>'
-
-  - name: ws-backend
-    type: web
-    env: node
-    buildCommand: 'pnpm install && pnpm turbo build --filter=ws-backend'
-    startCommand: 'node apps/ws-backend/dist/index.js'
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      npm install -g pnpm &&
+      pnpm install &&
+      pnpm --filter @repo/db exec prisma generate &&
+      pnpm turbo build --filter=http-backend
+    startCommand: node apps/http-backend/dist/index.js
     envVars:
       - fromGroup: shared-secrets
       - key: DATABASE_URL
@@ -33,7 +23,30 @@ services:
           name: x-draw-db
           property: connectionString
       - key: PORT
-        value: '8080'
+        value: '10000'
+      # IMPORTANT: Replace with your actual Vercel deployment URL after deploying frontend
+      - key: CORS_ORIGIN
+        value: 'https://your-app.vercel.app'
+
+  - name: ws-backend
+    type: web
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: |
+      npm install -g pnpm &&
+      pnpm install &&
+      pnpm --filter @repo/db exec prisma generate &&
+      pnpm turbo build --filter=ws-backend
+    startCommand: node apps/ws-backend/dist/index.js
+    envVars:
+      - fromGroup: shared-secrets
+      - key: DATABASE_URL
+        fromDatabase:
+          name: x-draw-db
+          property: connectionString
+      - key: PORT
+        value: '10000'
 
 databases:
   - name: x-draw-db
