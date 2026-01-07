@@ -14,6 +14,7 @@ services:
       npm install -g pnpm &&
       pnpm install --no-frozen-lockfile &&
       pnpm --filter @repo/db exec prisma generate &&
+      pnpm --filter @repo/db exec prisma migrate deploy &&
       pnpm turbo build --filter=http-backend
     startCommand: node apps/http-backend/dist/index.js
     envVars:
